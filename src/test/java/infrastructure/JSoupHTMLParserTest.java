@@ -12,7 +12,7 @@ class JSoupHTMLParserTest {
     void getDependentLinks() throws IOException {
         JSoupHTMLParser out = new JSoupHTMLParser();
 
-        out.getDependentLinks("https://www.sedna.com").forEach(System.out::println);
+        out.getDependentLinks("https://sedna.com/company/leadership-team/").stream().filter(link -> link.startsWith("https://sedna.com")).forEach(System.out::println);
     }
 
     @Test
