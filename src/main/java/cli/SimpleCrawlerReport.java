@@ -11,6 +11,10 @@ public class SimpleCrawlerReport {
 
         final WebCrawlerFlow process = new WebCrawlerFlow(new JSoupHTMLParser());
 
+        System.out.println("*************************************************");
+        System.out.println("***       Starting crawling and report        ***");
+        System.out.println("*************************************************");
+
         final List<CrawlerResult> results = process.getLinksAndAssets("https://sedna.com");
 
         results.forEach(result -> {
