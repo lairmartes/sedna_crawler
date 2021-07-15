@@ -4,6 +4,8 @@ import domain.CrawlerResult;
 import domain.UnableToAccessRequestedURL;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +42,6 @@ public class WebCrawlerFlow {
             final Set<String> newURLs = new HashSet<>();
             this.visitedURLs.addAll(URLs);
             URLs.forEach(url -> {
-                System.out.print("-");
                 final CrawlerResult currentCrawlerResult = creteCrawlerResult(baseURL, url);
                 this.crawlerResults.add(currentCrawlerResult);
                 newURLs.addAll(currentCrawlerResult.links());
@@ -52,19 +53,19 @@ public class WebCrawlerFlow {
 
     private CrawlerResult creteCrawlerResult(final String baseUrl, final String url) {
 
+        //:TODO - Use Logger to show this message
         System.out.println("Url being requested: " + url);
 
-        final Set<String> assets;
         try {
-            assets = htmlParser.getStaticDependencies(url);
             final Set<String> links = htmlParser.getDependentLinks(url)
                                                 .stream()
+                                                .map(link -> link.replaceFirst("\\?.*$",""))
                                                 .filter(link -> link.contains(baseUrl.replace(HTTPS, "")))
                                                 .collect(Collectors.toSet());
-            return CrawlerResult.builder().url(url).assets(assets).links(links).build();
+            return CrawlerResult.builder().url(url).assets(htmlParser.getStaticDependencies(url)).links(links).build();
 
         } catch (IOException e) {
-            throw new UnableToAccessRequestedURL();
+            return CrawlerResult.builder().url(url).assets(new HashSet<>()).links(new HashSet<>()).build();
         }
     }
 }

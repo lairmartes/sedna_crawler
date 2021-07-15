@@ -9,6 +9,8 @@ import java.util.List;
 
 class WebCrawlerFlowTest {
 
+    //TODO: Provide mock parser and control results for unit tests.
+
     private HTMLParser htmlParser;
 
     private WebCrawlerFlow out;
